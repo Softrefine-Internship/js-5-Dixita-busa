@@ -3,30 +3,28 @@
 'use strict';
 class University {
     constructor(universityName) {
+        if (typeof universityName !== 'string') {
+            throw new Error('University name must be a string');
+        }
         this.universityName = universityName;
-        this.departments = new Array(100); 
-        this.count = 0; 
+        this.departments = [];
     }
 
     addDepartment(departmentName) {
-        this.departments[this.count] = departmentName;
-        this.count++; 
+        if (typeof departmentName !== 'string') {
+            throw new Error('Department name must be a string');
+        }
+        this.departments.push(departmentName);
         console.log(`Added department: ${departmentName}`);
     }
 
     removeDepartment(departmentName) {
-        let index = -1;
-        for (let i = 0; i < this.count; i++) {
-            if (this.departments[i] === departmentName) {
-                index = i;
-                break;
-            }
+        if (typeof departmentName !== 'string') {
+            throw new Error('Department name must be a string');
         }
+        const index = this.departments.indexOf(departmentName);
         if (index !== -1) {
-            for (let i = index; i < this.count - 1; i++) {
-                this.departments[i] = this.departments[i + 1];
-            }
-            this.count--; 
+            this.departments.splice(index, 1);
             console.log(`Removed department: ${departmentName}`);
         } else {
             console.log(`Department ${departmentName} not found.`);
@@ -34,9 +32,11 @@ class University {
     }
 
     displayDepartments() {
-        console.log(`Departments in ${this.universityName}:`);
-        for (let i = 0; i < this.count; i++) {
-            console.log(`- ${this.departments[i]}`);
+        if (this.departments.length === 0) {
+            console.log("No departments found.");
+        } else {
+            console.log(`Departments in ${this.universityName}:`);
+            this.departments.forEach(department => console.log(`- ${department}`));
         }
     }
 }
@@ -48,3 +48,4 @@ university.addDepartment("Mechanical Engineering");
 university.displayDepartments();
 university.removeDepartment("Electrical Engineering");
 university.displayDepartments();
+

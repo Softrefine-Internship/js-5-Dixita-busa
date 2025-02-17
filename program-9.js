@@ -3,36 +3,49 @@
 "use strict";
 class Bank {
   constructor(bankName) {
+    if (typeof bankName !== 'string') {
+      throw new Error('Bank name must be a string');
+    }
     this.bankName = bankName;
-    this.branches = [];
+    this.branches = new Set();
   }
+
   addBranch(branchName) {
-    this.branches.push(branchName);
-    console.log(branchName + " branch added");
+    if (typeof branchName !== 'string') {
+      throw new Error('Branch name must be a string');
+    }
+    if (this.branches.has(branchName)) {
+      console.log(branchName + " branch already exists");
+    } else {
+      this.branches.add(branchName);
+      console.log(branchName + " branch added");
+    }
   }
 
   removeBranch(branchName) {
-    for (let i = 0; i < this.branches.length; i++) {
-      if (this.branches[i] === branchName) {
-        this.branches.splice(i, 1);
-        console.log(branchName + " branch removed");
-        return;
-      }
+    if (typeof branchName !== 'string') {
+      throw new Error('Branch name must be a string');
     }
-    console.log(branchName + " branch not found");
+    if (this.branches.has(branchName)) {
+      this.branches.delete(branchName);
+      console.log(branchName + " branch removed");
+    } else {
+      console.log(branchName + " branch not found");
+    }
   }
 
   displayBranches() {
-    console.log("Branches of " + this.bankName + ": " + this.branches.join(", "));
+    console.log("Branches of " + this.bankName + ": " + [...this.branches].join(", "));
   }
 }
 
 const bank = new Bank("State Bank");
 
 bank.addBranch("Ahmedabad");
-
 bank.addBranch("Surat");
+bank.addBranch("Ahmedabad");
 bank.displayBranches();
 
 bank.removeBranch("Surat");
 bank.displayBranches();
+

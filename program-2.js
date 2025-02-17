@@ -3,6 +3,9 @@
 'use strict';
 class Rectangle {
   constructor(width, height) {
+    if (typeof width !== 'number' || typeof height !== 'number' || width <= 0 || height <= 0) {
+      throw new Error("Width and height must be positive numbers");
+    }
     this.width = width;
     this.height = height;
   }
@@ -19,3 +22,4 @@ class Rectangle {
 const rectangle = new Rectangle(12, 8);
 console.log("Area : " + rectangle.calculateArea());
 console.log("Perimeter : " + rectangle.calculatePerimeter());
+

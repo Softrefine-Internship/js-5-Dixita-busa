@@ -2,28 +2,45 @@
 
 'use strict';
 class Employee {
+  #salary; 
+
   constructor(name, salary) {
+    if (typeof name !== 'string' || typeof salary !== 'number' || salary <= 0) {
+      throw new Error("Name must be a string and salary must be a positive number");
+    }
     this.name = name;
-    this.salary = salary;
+    this.#salary = salary;
   }
+
   calculateAnnualSalary() {
-    return 12 * this.salary;
+    return 12 * this.#salary;
   }
-};
+
+  getSalary() {
+    return this.#salary;
+  }
+}
 
 class Manager extends Employee {
   constructor(name, salary, department, bonus) {
     super(name, salary);
+    if (typeof department !== 'string' || typeof bonus !== 'number' || bonus < 0) {
+      throw new Error("Department must be a string and bonus must be a non-negative number");
+    }
     this.department = department;
-    this.bonus = bonus; 
+    this.bonus = bonus;
   }
+
   calculateAnnualSalary() {
     return super.calculateAnnualSalary() + this.bonus;
   }
-};
+}
 
 const manager1 = new Manager("Dixita", 50000, "IT", 1000);
 console.log("Annual Salary of Manager 1:", manager1.calculateAnnualSalary());
 
 const manager2 = new Manager("Nirmi", 30000, "HR", 2000);
 console.log("Annual Salary of Manager 2:", manager2.calculateAnnualSalary());
+
+
+
