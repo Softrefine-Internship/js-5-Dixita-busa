@@ -3,47 +3,56 @@
 'use strict';
 class BankAccount {
     constructor(accountNumber, accountHolder, balance) {
-        this.accountNumber = accountNumber;
-        this.accountHolder = accountHolder;
-        this.balance = balance;
+        if (typeof accountNumber !== 'number' || typeof accountHolder !== 'string' || typeof balance !== 'number') {
+            throw new Error('Invalid types for accountNumber, accountHolder, or balance');
+        }
+        this._accountNumber = accountNumber;
+        this._accountHolder = accountHolder;
+        this.#balance = balance;
     }
 
+    #balance;
+
     deposit(amount) {
-        if (amount > 0) {
-            this.balance = this.balance + amount;
-            console.log(`Deposited ${amount} into ${this.accountHolder}'s account. New balance: ${this.balance}`);
-        } else {
-            console.log("Deposit amount must be greater than zero.");
+        if (typeof amount !== 'number' || amount <= 0) {
+            throw new Error('Deposit amount must be a positive number');
         }
+        this.#balance += amount;
+        console.log(`Deposited ${amount} into ${this._accountHolder}'s account. New balance: ${this.#balance}`);
     }
 
     withdraw(amount) {
-        if (amount > 0 && amount <= this.balance) {
-            this.balance = this.balance - amount;
-            console.log(`Withdrawn ${amount} from ${this.accountHolder}'s account. New balance: ${this.balance}`);
-        } else {
-            console.log("Insufficient balance or invalid amount.");
+        if (typeof amount !== 'number' || amount <= 0 || amount > this.#balance) {
+            throw new Error('Invalid withdrawal amount');
         }
+        this.#balance -= amount;
+        console.log(`Withdrawn ${amount} from ${this._accountHolder}'s account. New balance: ${this.#balance}`);
     }
 
     transfer(amount, recipientAccount) {
-        if (amount > 0 && amount <= this.balance) {
-            this.withdraw(amount); 
-            recipientAccount.deposit(amount); 
-            console.log(`Transferred ${amount} from ${this.accountHolder} to ${recipientAccount.accountHolder}.`);
-        } else {
-            console.log("Transfer failed due to insufficient balance or invalid amount.");
+        if (typeof amount !== 'number' || amount <= 0 || amount > this.#balance) {
+            throw new Error('Invalid transfer amount');
         }
+        if (!(recipientAccount instanceof BankAccount)) {
+            throw new Error('Recipient must be a valid BankAccount instance');
+        }
+        this.withdraw(amount);
+        recipientAccount.deposit(amount);
+        console.log(`Transferred ${amount} from ${this._accountHolder} to ${recipientAccount._accountHolder}.`);
+    }
+
+    getBalance() {
+        return this.#balance;
     }
 }
 
 const account1 = new BankAccount(101, "Dixita", 50000);
 const account2 = new BankAccount(102, "Nirmi", 30000);
 
-account1.deposit(500); 
-account1.withdraw(300); 
-account1.transfer(200, account2); 
+account1.deposit(500);
+account1.withdraw(300);
+account1.transfer(200, account2);
 
-console.log(`${account1.accountHolder}'s final balance: ${account1.balance}`);
-console.log(`${account2.accountHolder}'s final balance: ${account2.balance}`);
+console.log(`${account1._accountHolder}'s final balance: ${account1.getBalance()}`);
+console.log(`${account2._accountHolder}'s final balance: ${account2.getBalance()}`);
 

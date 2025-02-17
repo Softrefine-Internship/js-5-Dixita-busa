@@ -3,6 +3,12 @@
 'use strict';
 class Person {
   constructor(name, age, country) {
+    if (typeof name !== 'string' || typeof country !== 'string') {
+      throw new Error("Name and country must be strings");
+    }
+    if (typeof age !== 'number' || age < 0) {
+      throw new Error("Age must be a positive number");
+    }
     this.name = name;
     this.age = age;
     this.country = country;

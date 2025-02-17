@@ -2,6 +2,10 @@
 
 'use strict';
 class Shape {
+  constructor() {
+    this.pi = Math.PI;
+  }
+
   area() {
     return 0;
   }
@@ -9,12 +13,18 @@ class Shape {
 
 class Circle extends Shape {
   area(r) {
-    return r * r * 3.14;
+    if (typeof r !== 'number' || r <= 0) {
+      throw new Error("Radius must be a positive number");
+    }
+    return r * r * this.pi;
   }
 }
 
 class Triangle extends Shape {
   area(height, base) {
+    if (typeof height !== 'number' || height <= 0 || typeof base !== 'number' || base <= 0) {
+      throw new Error("Height and base must be positive numbers");
+    }
     return 0.5 * base * height;
   }
 }
@@ -24,4 +34,7 @@ console.log("Area of Circle:", circle.area(5));
 
 const triangle = new Triangle();
 console.log("Area of Triangle:", triangle.area(3, 4));
+
+
+
 

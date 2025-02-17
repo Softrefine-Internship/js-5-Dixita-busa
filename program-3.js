@@ -3,6 +3,9 @@
 'use strict';
 class Vehicle {
   constructor(make, model, year) {
+    if (typeof make !== 'string' || typeof model !== 'string' || typeof year !== 'number') {
+      throw new Error("Make and model must be strings, year must be a number");
+    }
     this.make = make;
     this.model = model;
     this.year = year;
@@ -16,6 +19,9 @@ class Vehicle {
 class Car extends Vehicle {
   constructor(make, model, year, doors) {
     super(make, model, year);
+    if (typeof doors !== 'number' || doors <= 0) {
+      throw new Error("Doors must be a positive number");
+    }
     this.doors = doors;
   }
 
@@ -27,3 +33,4 @@ class Car extends Vehicle {
 
 const car = new Car("Rolls-Royce", "Phantom", 2025, 4);
 car.displayDetails();
+

@@ -2,27 +2,43 @@
 
 'use strict';
 class BankAccount {
+  #accountNumber;
+  #balance;
+
   constructor(accountNumber, balance) {
-    this.accountNumber = accountNumber;
-    this.balance = parseInt(balance);
+    if (typeof accountNumber !== 'number' || typeof balance !== 'number') {
+      throw new Error("Account number and balance must be numbers");
+    }
+    this.#accountNumber = accountNumber;
+    this.#balance = balance;
   }
 
   deposit(amount) {
-    if (amount > 0) {
-      this.balance += amount;
-      console.log("Deposited: " + amount + ", New Balance: " + this.balance);
+    if (amount <= 0 || typeof amount !== 'number') {
+      console.log("Deposit amount must be a positive number");
     } else {
-      console.log("Deposit amount must be positive");
+      this.#balance += amount;
+      console.log("Deposited: " + amount + ", New Balance: " + this.#balance);
     }
   }
 
   withdraw(amount) {
-    if (amount > 0 && amount <= this.balance) {
-      this.balance -= amount;
-      console.log("Withdrawn: " + amount + ", Remaining Balance: " + this.balance);
+    if (amount <= 0 || typeof amount !== 'number') {
+      console.log("Withdrawal amount must be a positive number");
+    } else if (amount > this.#balance) {
+      console.log("Insufficient balance");
     } else {
-      console.log("Invalid withdrawal amount");
+      this.#balance -= amount;
+      console.log("Withdrawn: " + amount + ", Remaining Balance: " + this.#balance);
     }
+  }
+
+  getAccountNumber() {
+    return this.#accountNumber;
+  }
+
+  getBalance() {
+    return this.#balance;
   }
 }
 
@@ -30,6 +46,5 @@ const account1 = new BankAccount(101, 500);
 account1.deposit(200);
 account1.withdraw(100);
 
-const account2 = new BankAccount(102, 1000);
-account2.deposit(500);
-account2.withdraw(1500);
+
+
